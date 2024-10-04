@@ -11,7 +11,20 @@ test("sorted-ascending", async ({ page }) => {
     const ageElements = await page.locator(".age").all();
 
     for (const post of ageElements) {
-      if (publishedTimestamps.length === 100) break;
+      if (publishedTimestamps.length === 100) {
+        // determine sort order
+        for (let i = 0; i < publishedTimestamps.length - 1; i++) {
+          if (
+            new Date(publishedTimestamps[i]) <
+            new Date(publishedTimestamps[i + 1])
+          ) {
+            console.log("false");
+            return false;
+          }
+        }
+        console.log("true");
+        return true;
+      }
       const timestamp = await post.getAttribute("title");
       publishedTimestamps.push(timestamp);
     }
@@ -36,6 +49,4 @@ test("sorted-ascending", async ({ page }) => {
   await page.getByRole("link", { name: "More" }).locator("nth=-1").click();
   await expect(page).toHaveURL(/&n=91/);
   await addTimestamps(page);
-
-  // console.log(publishedTimestamps, publishedTimestamps.length);
 });
