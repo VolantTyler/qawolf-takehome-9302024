@@ -7,24 +7,23 @@ test("sorted-ascending", async ({ page }) => {
   let publishedTimestamps = [];
 
   const addTimestamps = async (page) => {
-    // get all published timestamps from a page of results
+    // get all published timestamps from each page of results
     const ageElements = await page.locator(".age").all();
 
     for (const post of ageElements) {
+      // determine sort order when we have exactly 100 timestamps
+      // don't determine based on each page's results, as this would not pick up a false result between the last item of one page and the first item of the next page
       if (publishedTimestamps.length === 100) {
         // determine sort order
         for (let i = 0; i < publishedTimestamps.length - 1; i++) {
-          if (
-            new Date(publishedTimestamps[i]) <
-            new Date(publishedTimestamps[i + 1])
-          ) {
-            console.log("false");
-            return false;
-          }
+          const dateFirst = new Date(publishedTimestamps[i]);
+          const dateSecond = new Date(publishedTimestamps[i + 1]);
+          expect(dateFirst.getTime()).toBeGreaterThanOrEqual(
+            dateSecond.getTime()
+          );
         }
-        console.log("true");
-        return true;
       }
+      // add timestamp to full array only if we do not yet have 100 entries
       const timestamp = await post.getAttribute("title");
       publishedTimestamps.push(timestamp);
     }
