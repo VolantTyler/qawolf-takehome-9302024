@@ -16,20 +16,20 @@ async function sortHackerNewsArticles() {
 
     for (const post of ageElements) {
       // determine sort order when we have exactly 100 timestamps
-      // don't determine based on each page's results, as this would not pick up a false result between the last item of one page and the first item of the next page
+      // don't determine based on each page's results, as this would not pick up a false assertion result between the last item of one page and the first item of the next page
       if (publishedTimestamps.length === 100) {
         // determine sort order
         for (let i = 0; i < publishedTimestamps.length - 1; i++) {
           const dateFirst = new Date(publishedTimestamps[i]);
           const dateSecond = new Date(publishedTimestamps[i + 1]);
           // pass
-          // expect(dateFirst.getTime()).toBeGreaterThanOrEqual(
-          //   dateSecond.getTime()
-          // );
-          // fail
-          expect(dateSecond.getTime()).toBeGreaterThanOrEqual(
-            dateFirst.getTime()
+          expect(dateFirst.getTime()).toBeGreaterThanOrEqual(
+            dateSecond.getTime()
           );
+          // fail assertion: uncomment to see test fail
+          // expect(dateSecond.getTime()).toBeGreaterThanOrEqual(
+          //   dateFirst.getTime()
+          // );
         }
       }
       // add timestamp to full array only if we do not yet have 100 entries
