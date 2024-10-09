@@ -22,8 +22,13 @@ async function sortHackerNewsArticles() {
         for (let i = 0; i < publishedTimestamps.length - 1; i++) {
           const dateFirst = new Date(publishedTimestamps[i]);
           const dateSecond = new Date(publishedTimestamps[i + 1]);
-          expect(dateFirst.getTime()).toBeGreaterThanOrEqual(
-            dateSecond.getTime()
+          // pass
+          // expect(dateFirst.getTime()).toBeGreaterThanOrEqual(
+          //   dateSecond.getTime()
+          // );
+          // fail
+          expect(dateSecond.getTime()).toBeGreaterThanOrEqual(
+            dateFirst.getTime()
           );
         }
       }
@@ -33,6 +38,7 @@ async function sortHackerNewsArticles() {
     }
   };
 
+  // go to first page of articles
   await page.goto("https://news.ycombinator.com/newest");
   await expect(page).toHaveURL("https://news.ycombinator.com/newest");
   await expect(page.locator(".topsel")).toContainText("new");
